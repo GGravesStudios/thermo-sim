@@ -1,151 +1,125 @@
 # Thermo-Sim 🔥  
-**An open‑source physics thermodynamics simulator for students, educators, and science enthusiasts.**
+**An open-source thermodynamics simulator for students, educators, and science enthusiasts.**
 
-Thermo‑Sim is a web application designed to help users visualize and interact with core thermodynamics concepts such as gas laws, heat transfer, calorimetry, and p‑V diagrams. The goal: take what students normally only see as formulas, and turn it into an intuitive, interactive learning tool.
-
----
-
-## 🎯 Project Goals
-
-- Provide an accessible, visual way to explore **ideal gas behavior**  
-- Simulate **thermodynamic processes** (isothermal, isobaric, isochoric)  
-- Display **p‑V diagrams** with real‑time calculations  
-- Offer **study mode** with guided examples and physics explanations  
-- Support open‑source contributions from students and developers  
-- Eventually include calorimetry, phase changes, and heat engine cycles  
+Thermo-Sim now has a working MVP: an ideal gas sandbox with a live p–V diagram, backed by a Spring Boot API that can solve PV = nRT on demand.
 
 ---
 
-## 🧪 Key Features (MVP)
+## 🎯 What you can do today
 
-### ✔️ Ideal Gas Calculator  
-- Input or lock values of P, V, T, n  
-- Automatically compute the missing variable using \( PV = nRT \)  
-- Unit conversions (atm/Pa, L/m³, °C/K)
-
-### ✔️ p‑V Diagram Viewer  
-- Plot thermodynamic processes  
-- Animate transitions between states  
-- Display work, heat, and internal energy changes
-
-### ✔️ Guided Study Mode  
-- Pre‑built scenarios  
-- Explanation panels  
-- Conceptual questions
+- Solve the ideal gas law locally in the browser or via the backend solver.
+- Plot an isothermal-style p–V curve that updates as you change P, V, T, and n.
+- Hit a health endpoint to verify backend connectivity.
+- Fetch sample learning scenarios (stub data) for future study mode work.
 
 ---
 
-## 🚧 Future Features (Roadmap)
+## 🚀 Run it locally
 
-- Calorimetry simulations  
-- Phase change + heating curves  
-- Carnot / Otto engine visualization  
-- User accounts & saved scenarios  
-- Physics‑explanation “cards” stored in database  
-- 3‑D molecular‑scale gas visualization (stretch goal)
+### Prereqs
+- Node.js 18+ (uses Vite)  
+- Java 17+ (Spring Boot)  
+- npm (or pnpm/yarn) + Maven wrapper provided
 
-A detailed roadmap will be added soon.
-
----
-
-## 🖥️ Technology Stack
-
-### **Frontend**
-- JavaScript / TypeScript  
-- React (planned)  
-- Chart.js or Recharts for visualizations  
-
-### **Backend**
-- Java + Spring Boot REST API  
-- Spring Data JPA  
-
-### **Database**
-- PostgreSQL (recommended)  
-
----
-
-## 📂 Repository Structure (initial)
-
+### Backend (Spring Boot)
 ```
-thermo-sim/
-├── backend/           # Java Spring Boot backend (TBA)
-├── frontend/          # JS/React frontend (TBA)
-├── docs/
-│   ├── dev-log/
-│   └── architecture.md
-├── README.md
-└── LICENSE
+cd backend
+./mvnw spring-boot:run
+# serves on http://localhost:8080
 ```
 
-*This structure will evolve as the project grows.*
+### Frontend (Vite + React + Recharts)
+```
+cd frontend
+npm install
+npm run dev
+# opens on http://localhost:5173
+```
+
+The frontend expects the API at `http://localhost:8080` (see `frontend/src/utils/backend.ts`). CORS is already configured for the Vite dev origin.
 
 ---
 
-## 🚀 Getting Started
+## 🛠️ Dev quickstart (copy/paste)
 
-### Clone the repository
 ```
-git clone https://github.com/GGravesStudios/thermo-sim.git
-cd thermo-sim
-```
+# Terminal 1 — backend
+cd backend
+./mvnw spring-boot:run
 
-### Frontend setup (placeholder)
-```
+# Terminal 2 — frontend
 cd frontend
 npm install
 npm run dev
 ```
 
-### Backend setup (placeholder)
+---
+
+## 🧪 API surface (MVP)
+
+- `GET /api/health` — basic status payload with timestamp.  
+- `GET /api/scenarios` — returns placeholder scenarios (ideal gas and calorimetry draft).  
+- `POST /api/ideal-gas/solve` — solves for one variable given the other three.
+
+Example request:
+```http
+POST /api/ideal-gas/solve
+Content-Type: application/json
+
+{
+  "P_atm": 1,
+  "V_L": 22.4,
+  "T_K": 273.15,
+  "n_mol": 1,
+  "solveFor": "V"
+}
 ```
-cd backend
-./mvnw spring-boot:run
+
+Example response:
+```json
+{
+  "solvedFor": "V",
+  "value": 22.4,
+  "unit": "L",
+  "label": "Volume V",
+  "error": null
+}
 ```
+
+Backend constants: R = 0.08206 L·atm / (mol·K). Inputs must be positive; invalid input returns 400 with an error message.
 
 ---
 
-## 🤝 Contributing
+## 📂 Repository layout
 
-We welcome contributions!  
-A full `CONTRIBUTING.md` will be added soon, but early contributions may include:
+```
+thermo-sim/
+├── backend/      # Spring Boot API (health, sample scenarios, ideal-gas solver)
+├── frontend/     # Vite + React UI (ideal gas sandbox, p–V chart, backend probe)
+├── Docs/         # Architecture, roadmap, project plan, contributing guide
+└── .vscode/      # Workspace settings
+```
 
-- Bug reports  
-- Feature suggestions  
-- UI mockups  
-- Physics validation checks  
-- Starter implementations for frontend or backend  
+Key entry points:  
+- Frontend UI: `frontend/src/App.tsx`, `frontend/src/components/GasSandbox.tsx`, `frontend/src/components/PvDiagram.tsx`  
+- Backend routes: `backend/src/main/java/com/thermosim/backend/api/*`
 
-If you're new to open source, this is a friendly project to learn with.
+---
+
+## 🧭 Next steps
+
+- Flesh out study mode: render scenario cards from the backend stub.  
+- Add unit tests for backend solvers and frontend math helpers.  
+- Expand physics modules (calorimetry, phase changes, engine cycles) per `Docs/ROADMAP.md`.
 
 ---
 
 ## 📝 License
 
-This project will be released under the **MIT License**.  
-The `LICENSE` file will describe permissions and limitations.
-
----
-
-## 🌟 Why This Matters
-
-Physics is hard — but understanding it shouldn’t be inaccessible.
-
-This simulator aims to help:
-- Students who struggle with visualization  
-- Instructors who need demonstration tools  
-- Self-learners exploring physics  
-- Developers who want to collaborate on an educational open-source project  
+MIT — see `Docs/LICENSE`.
 
 ---
 
 ## 👨‍💻 Maintainer
 
-**Gabriel Graves (GGravesStudios)**  
-Creator, Developer, Student Researcher
-
----
-
-## 📢 Stay Tuned
-
-New features, UI mockups, architecture docs, and contributor guides are coming soon.  
-Watch the repo ⭐ to follow updates.
+**Gabriel Graves (GGravesStudios)** — Creator, Developer, Student Researcher

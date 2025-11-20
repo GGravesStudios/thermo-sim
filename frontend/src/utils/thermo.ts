@@ -27,8 +27,57 @@ const R_L_ATM = 0.08206; // L·atm / (mol·K)
 
 // --- Ideal Gas Solver ---
 
-export function solveIdealGas(input: IdealGasInput): IdealGasSolution | null {
+function errorSolution(message: string): IdealGasSolution {
+  return { value: NaN, unit: '', label: 'Error', error: message };
+}
+
+function validatePositive(value: number, label: string): string | null {
+  if (!Number.isFinite(value)) {
+    return `${label} must be a finite, positive number.`;
+  }
+  if (value <= 0) {
+    return `${label} must be positive.`;
+  }
+  return null;
+}
+
+export function solveIdealGas(input: IdealGasInput): IdealGasSolution {
   const { P_atm, V_L, T_K, n_mol, solveFor } = input;
+
+  const requirements: Record<SolveFor, Array<[number, string]>> = {
+    P: [
+      [V_L, 'Volume V_L'],
+      [T_K, 'Temperature T_K'],
+      [n_mol, 'Amount n_mol'],
+    ],
+    V: [
+      [P_atm, 'Pressure P_atm'],
+      [T_K, 'Temperature T_K'],
+      [n_mol, 'Amount n_mol'],
+    ],
+    T: [
+      [P_atm, 'Pressure P_atm'],
+      [V_L, 'Volume V_L'],
+      [n_mol, 'Amount n_mol'],
+    ],
+    n: [
+      [P_atm, 'Pressure P_atm'],
+      [V_L, 'Volume V_L'],
+      [T_K, 'Temperature T_K'],
+    ],
+  };
+
+  const checks = requirements[solveFor];
+  if (!checks) {
+    return errorSolution('Unknown variable to solve for.');
+  }
+
+  for (const [value, label] of checks) {
+    const validation = validatePositive(value, label);
+    if (validation) {
+      return errorSolution(validation);
+    }
+  }
 
   try {
     switch (solveFor) {
@@ -49,20 +98,10 @@ export function solveIdealGas(input: IdealGasInput): IdealGasSolution | null {
         return { value, unit: 'mol', label: 'Amount n' };
       }
       default:
-        return {
-          value: NaN,
-          unit: '',
-          label: 'Error',
-          error: 'Unknown variable to solve for.',
-        };
+        return errorSolution('Unknown variable to solve for.');
     }
   } catch {
-    return {
-      value: NaN,
-      unit: '',
-      label: 'Error',
-      error: 'Invalid inputs or division by zero.',
-    };
+    return errorSolution('Invalid inputs or division by zero.');
   }
 }
 

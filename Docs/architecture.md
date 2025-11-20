@@ -7,6 +7,11 @@
 
 Thermo-Sim is structured as a **full-stack web application** with a JavaScript/TypeScript frontend and a Java Spring Boot backend, backed by a relational database (PostgreSQL).  
 
+### Current MVP snapshot
+- Frontend (Vite + React 19) renders the ideal gas sandbox, p–V diagram, and backend status badge.  
+- Backend (Spring Boot 3) exposes `/api/health`, `/api/scenarios` (stub), and `/api/ideal-gas/solve`.  
+- All calculations for the sandbox are client-side by default; backend solver is used for parity/validation.  
+
 The primary goals of the architecture are:
 
 - Separation of concerns (UI, simulation logic, persistence)

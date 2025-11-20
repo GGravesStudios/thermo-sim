@@ -1,60 +1,48 @@
-# Development Log — DATE  
-*Thermo-Sim Project Dev Notes*
+# Development Log — TEMPLATE  
+*Copy this file to `dev-log_YYYY-MM-DD.md` for daily notes.*
 
 ---
 
 ## 📝 Overview  
-This development log captures progress, decisions, obstacles, and next steps for the Thermo-Sim project.  
-Use this log entry to document what was accomplished today and what remains.
+Use this template to capture daily progress, decisions, obstacles, and next steps for Thermo-Sim.  
+Replace the sections below with the specifics for the day.
 
 ---
 
 ## ✅ Completed Today
-
-- Initialized the `Docs/` directory for project documentation.
-- Added major foundational documents:
-  - `PROJECT_PLAN.md`
-  - `CONTRIBUTING.md`
-  - `CODE_OF_CONDUCT.md`
-  - `architecture.md`
-- Established open‑source workflow and repository structure.
-- Set up environment for future frontend and backend development.
+<bullets for what shipped today, e.g.>
+- Implemented MVP ideal gas sandbox UI and backend solver integration.
+- Added p–V diagram using Recharts.
+- Documented endpoints in `Docs/README.md`.
 
 ---
 
 ## 🧠 Key Decisions
-
-- Adopted React + TypeScript for the frontend.
-- Selected Java + Spring Boot for backend architecture.
-- Chose PostgreSQL as the database for scenarios and concept storage.
-- Determined the initial simulation logic will live on the frontend for performance and simplicity.
+<bullets for decisions, e.g.>
+- Keep MVP calculations client-side; backend used for validation/teaching parity.
+- Use Vite + React 19 for dev speed; Recharts for initial plotting.
+- Use Spring Boot 3 with simple controllers before adding persistence.
 
 ---
 
 ## 🧩 Challenges / Notes
-
-- Need to finalize folder names for consistency (`Docs` vs `docs`).
-- Must scaffold the `frontend/` and `backend/` directories next.
-- Considering options for charting libraries (Chart.js vs Recharts).
-- Need to decide whether user accounts will be part of MVP or phase 2.
+<bullets for issues/blockers, e.g.>
+- Need automated tests around `thermo.ts` and `IdealGasController`.
+- Decide on persistence approach for scenarios (DB vs. JSON first).
+- Performance of chart with more points still to evaluate.
 
 ---
 
 ## 🚀 Next Steps
-
-- Create ROADMAP.md
-- Begin scaffolding:
-  - `frontend/` (Vite project, base React structure)
-  - `backend/` (Spring Boot skeleton, health endpoint)
-- Create API draft file (optional).
-- Add first example simulation dataset in JSON.
-- Start drafting UI wireframes for key screens.
+<bullets for upcoming work, e.g.>
+- Add tests for physics helpers and backend solver endpoints.
+- Wire study mode UI to `/api/scenarios`.
+- Outline calorimetry module scope and equations to support.
 
 ---
 
 ## 📅 Additional Notes  
-This file is intended to be duplicated for future logs:  
-`dev-log_YYYY-MM-DD.md`  
-Place all logs inside `/Docs/DevLogs/` or `/Docs/dev-log/` depending on preferred structure.
+Duplicate this template per day as `Docs/dev-log_YYYY-MM-DD.md`.  
+Keep logs in `Docs/` (or a `Docs/dev-log/` folder if you prefer grouping them).
 
 ---

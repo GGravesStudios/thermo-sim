@@ -33,7 +33,7 @@ Each phase can overlap; this is a guide, not a rigid schedule.
 
 ---
 
-## 3. Phase 0 – Foundation & Docs ✅ (In Progress)
+## 3. Phase 0 – Foundation & Docs ✅ (Done)
 
 **Goals:**
 - Create a clean, welcoming repository.
@@ -52,54 +52,53 @@ Each phase can overlap; this is a guide, not a rigid schedule.
 
 ---
 
-## 4. Phase 1 – MVP Simulator (Ideal Gas + p–V)
+## 4. Phase 1 – MVP Simulator (Ideal Gas + p–V) ✅ (Delivered)
 
 **Core Goal:**  
 Deliver a working, interactive simulator for ideal gas behavior and simple p–V processes that runs locally.
 
 ### 4.1 Frontend
 
-- [ ] Scaffold React + TypeScript frontend (Vite or similar).
-- [ ] Implement basic layout (header, content area, footer).
-- [ ] Build **Ideal Gas Sandbox** UI:
-  - [ ] Inputs/sliders for P, V, T, n.
-  - [ ] Lock/unlock variable behavior.
-  - [ ] Live calculation of the fourth variable using PV = nRT.
-  - [ ] Basic unit conversions (atm/Pa, L/m³, °C/K).
-- [ ] Create a simple **p–V chart**:
-  - [ ] Display current state point.
-  - [ ] Plot simple paths between states.
-- [ ] Add a **results/explanation panel**:
-  - [ ] Show equations used.
-  - [ ] Show numeric results.
-  - [ ] Short conceptual explanation.
+- [x] Scaffolded React + TypeScript frontend via Vite.
+- [x] Implemented base layout (header, panels, footer).
+- [x] Built **Ideal Gas Sandbox** UI:
+  - [x] Inputs for P, V, T, n with solve-for selector.
+  - [x] Live calculation of the fourth variable using PV = nRT.
+  - [x] Basic unit conversions (atm/Pa, L/m³, °C/K) shown inline.
+- [x] Created **p–V chart** with Recharts:
+  - [x] Generates isothermal-style curve from current state.
+- [x] Added a **results/explanation panel**:
+  - [x] Shows solved variable, units, and PV = nRT reminder.
+- [x] Backend connectivity indicator.
 
 ### 4.2 Simulation Logic
 
-- [ ] Implement `thermo.ts` utility:
-  - [ ] Ideal gas law solver.
-  - [ ] Work/heat calculations for isothermal, isobaric, isochoric.
-  - [ ] Unit conversion helpers.
-- [ ] Add tests (or at least dev-time checks) for core physics functions.
+- [x] Implemented `thermo.ts` utility:
+  - [x] Ideal gas law solver.
+  - [ ] Work/heat calculations for isothermal, isobaric, isochoric. *(planned)*
+  - [x] Unit conversion helpers.
+- [ ] Add unit/component tests for core physics helpers. *(todo)*
 
 ### 4.3 Backend Skeleton
 
-- [ ] Scaffold Spring Boot application:
-  - [ ] Basic project structure.
-  - [ ] `GET /api/health` endpoint.
-- [ ] Decide local dev conventions (ports, profiles, etc.).
+- [x] Scaffolded Spring Boot application.
+- [x] `GET /api/health` endpoint.
+- [x] `GET /api/scenarios` stub for study mode seeds.
+- [x] `POST /api/ideal-gas/solve` endpoint.
+- [x] CORS configuration for Vite dev origin.
+- [x] Local dev conventions: backend `:8080`, frontend `:5173`.
 
 ### 4.4 Completion Criteria
 
 - A user can:
-  - Run frontend and backend locally.
-  - Adjust ideal gas variables and see correct outputs.
-  - View a basic p–V diagram.
-  - Read a short explanation of what’s happening physically.
+  - Run frontend and backend locally. ✅
+  - Adjust ideal gas variables and see correct outputs. ✅
+  - View a p–V diagram updated from current state. ✅
+  - Read a short equation reminder. ✅
 
 ---
 
-## 5. Phase 2 – Extended Thermodynamics Modules
+## 5. Phase 2 – Extended Thermodynamics Modules (Next)
 
 **Core Goal:**  
 Expand beyond simple ideal gas and basic processes into more topics encountered in intro thermo courses.
@@ -139,7 +138,7 @@ Expand beyond simple ideal gas and basic processes into more topics encountered 
 
 ---
 
-## 6. Phase 3 – Engine Cycles & Advanced Visualizations
+## 6. Phase 3 – Engine Cycles & Advanced Visualizations (Future)
 
 **Core Goal:**  
 Introduce more advanced concepts often taught in thermodynamics and physical chemistry.
@@ -166,7 +165,7 @@ Introduce more advanced concepts often taught in thermodynamics and physical che
 
 ---
 
-## 7. Phase 4 – Learning Platform Features
+## 7. Phase 4 – Learning Platform Features (Future)
 
 **Core Goal:**  
 Turn Thermo-Sim from a single tool into a learning platform that supports students and educators.

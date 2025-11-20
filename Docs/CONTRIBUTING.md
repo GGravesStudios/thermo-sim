@@ -1,9 +1,9 @@
 # Contributing to Thermo-Sim
 
-Thank you for your interest in contributing to **Thermo-Sim**!  
+Thanks for your interest in **Thermo-Sim**!  
 This project welcomes developers, students, physics enthusiasts, educators, and anyone who wants to help build an open-source thermodynamics simulation tool.
 
-This document outlines how to contribute, the workflow, coding conventions, and community expectations.
+This guide covers how to contribute, the workflow, coding conventions, and community expectations.
 
 ---
 
@@ -73,8 +73,8 @@ experiment/<name>
 ```
 
 ### 🧪 2. Develop Locally
-- Follow frontend/backend setup from README  
-- Ensure code runs locally  
+- Backend: `cd backend && ./mvnw spring-boot:run` (port 8080)  
+- Frontend: `cd frontend && npm install && npm run dev` (port 5173)  
 - Keep commits small and descriptive  
 
 Good commit examples:
@@ -85,20 +85,17 @@ docs: expand contributing guidelines
 ```
 
 ### 🧹 3. Coding Standards
-- Use clear, descriptive variable names  
-- Comment physics calculations generously  
-- Keep components small & modular  
-- Avoid deeply nested logic when possible  
-- Prefer pure functions in simulation logic  
+- Use clear, descriptive names.  
+- Comment physics/math where it might be non-obvious; keep comments concise.  
+- Keep components small & modular.  
+- Prefer pure functions in simulation logic for easier testing (`thermo.ts`).  
 
 ### 📤 4. Submit a Pull Request
 
-A PR should include:
-
-- What the change does  
-- Why it's needed  
-- How to test it  
-- Any physics references (if applicable)  
+Include:
+- What the change does and why it matters.  
+- How to test it (commands, expected behavior).  
+- Any physics references or assumptions.  
 
 Maintainers will review and provide feedback.
 
@@ -106,30 +103,30 @@ Maintainers will review and provide feedback.
 
 ## 🧪 Physics Validation Expectations
 
-Thermo-Sim involves real physics, so contributors should:
-
-- Include references for any equations used  
-- Follow standard conventions:
+- Cite sources for equations when adding new ones.  
+- Standard references used today:
   - \(PV = nRT\)
   - \(W = \int P\, dV\)
   - \(Q = nC\Delta T\)
-  - \(ΔU = nC_v\Delta T\)
-
-If you aren’t confident in the physics, open a discussion — it's totally okay.
+  - \(ΔU = nC_v\Delta T\)  
+- If unsure, open a discussion — collaboration is encouraged.
 
 ---
 
-## 🗂 Project Structure Overview
+## 🗂 Project Structure Overview (current)
 
 ```
 Docs/
+  README.md
   PROJECT_PLAN.md
+  ROADMAP.md
+  architecture.md
   CONTRIBUTING.md
-  ARCHITECTURE.md (coming soon)
-backend/ (planned)
-frontend/ (planned)
-README.md
-LICENSE
+  CODE_OF_CONDUCT.md
+backend/
+  src/main/java/com/thermosim/backend/...   # Spring Boot API
+frontend/
+  src/...                                  # Vite + React app
 ```
 
 ---
@@ -150,14 +147,12 @@ These are ideal for new contributors or students learning to code.
 
 ## 🧑‍🤝‍🧑 Community Guidelines
 
-Thermo-Sim follows the project’s **Code of Conduct** (coming soon):
+Thermo-Sim follows the project’s **Code of Conduct** (`Docs/CODE_OF_CONDUCT.md`):
 
-- Be respectful  
-- Be patient  
-- Assume positive intent  
-- Support newcomers  
-- Focus on collaboration  
-
+- Be respectful and patient.  
+- Assume positive intent.  
+- Support newcomers.  
+- Focus on collaboration.  
 Harassment or discrimination is never tolerated.
 
 ---
@@ -172,4 +167,3 @@ Feel free to open an issue or start a discussion in the GitHub repository.
 
 Your contributions — whether code, documentation, physics insight, or suggestions — help move Thermo-Sim forward.  
 Thank you for helping build something that supports physics learners everywhere!
-

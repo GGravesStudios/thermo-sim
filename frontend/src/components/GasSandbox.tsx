@@ -19,7 +19,14 @@ export const GasSandbox: React.FC<GasSandboxProps> = ({ inputs, onChange }) => {
     try {
       setBackendLoading(true);
       setBackendError(null);
-      const result = await solveIdealGasRemote(inputs);
+      const payload = {
+        ...inputs,
+        P_atm: inputs.solveFor === 'P' ? null : inputs.P_atm,
+        V_L: inputs.solveFor === 'V' ? null : inputs.V_L,
+        T_K: inputs.solveFor === 'T' ? null : inputs.T_K,
+        n_mol: inputs.solveFor === 'n' ? null : inputs.n_mol,
+      };
+      const result = await solveIdealGasRemote(payload as any);
       setBackendResult(result);
     } catch (err) {
       console.error(err);

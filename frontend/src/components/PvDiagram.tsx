@@ -25,7 +25,7 @@ export const PvDiagram: React.FC<PvDiagramProps> = ({ inputs }) => {
     }
 
     const baseV = V_L;
-    const factors = [0.5, 0.75, 1, 1.0, 1.25, 1.5];
+    const factors = [0.25, 0.5, 1, 1.5, 2];
 
     return factors
       .map(f => {

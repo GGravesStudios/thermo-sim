@@ -1,240 +1,138 @@
 # Thermo-Sim Project Plan  
-*A detailed technical and development roadmap for the physics thermodynamics simulator.*
+*Technical roadmap and current state overview for the thermodynamics simulator.*
 
 ---
 
 ## 1. Overview
 
-**Thermo-Sim** is an open-source interactive learning tool designed to help students understand core thermodynamics concepts through visualization, simulation, and guided problem-solving. This document outlines the vision, architecture, milestones, and development workflow for the project.
+Thermo-Sim is an open-source interactive learning tool that helps students visualize and compute core thermodynamics relationships. The MVP delivers an ideal gas sandbox with a live p–V diagram, backed by a Spring Boot API for solving PV = nRT.
 
 ---
 
 ## 2. Goals & Educational Purpose
 
-### 🎯 Primary Goals
-- Provide an intuitive interface for exploring **ideal gas laws**  
-- Visualize **p-V diagrams**, thermodynamic processes, and heat/work calculations  
-- Build a modular system to expand into **calorimetry**, **phase changes**, and **engine cycles**  
-- Support both **self-paced learning** and **classroom demonstrations**
+### 🎯 Primary Goals (MVP delivered)
+- Provide an intuitive interface for exploring ideal gas laws (solve for P/V/T/n).  
+- Visualize p–V behavior for the current state.  
+- Establish a modular path toward calorimetry, phase changes, and engine cycles.  
+- Support both self-paced learning and classroom demos.
 
 ### 📘 Pedagogical Philosophy
-- Show *why* formulas work, not just *what* they calculate  
-- Foster scientific intuition with animations & real-time feedback  
-- Provide explanations that reinforce conceptual understanding  
+- Explain why formulas work, not just what they compute.  
+- Reinforce concepts with real-time feedback and visuals.  
+- Keep interfaces approachable for students and educators.
 
 ---
 
-## 3. MVP Feature Set
+## 3. MVP Feature Set (current)
 
-### ✔️ 3.1 Ideal Gas Sandbox
-- Input fields & sliders for:
-  - Pressure (P)
-  - Volume (V)
-  - Temperature (T)
-  - Moles (n)
-- Automatically compute the fourth variable
-- Unit conversions:
-  - atm ↔ Pa  
-  - L ↔ m³  
-  - °C ↔ K  
-- "Lock variable" system: user chooses which variable stays constant
+### ✔️ Ideal Gas Sandbox
+- Numeric inputs for P, V, T, n with a solve-for selector.  
+- Live calculation of the fourth variable using PV = nRT.  
+- Inline unit conversions (atm/Pa, L/m³, K/°C).  
+- Backend solver call available from the UI.
 
-### ✔️ 3.2 p–V Diagram Module
-- Real-time plotting of state points  
-- Support for:
-  - Isothermal processes
-  - Isobaric processes
-  - Isochoric processes
-- Animated transitions between states  
-- Calculations:
-  - Work (W)
-  - Heat (Q)
-  - Internal energy ΔU
+### ✔️ p–V Diagram Module
+- Recharts curve derived from current state (isothermal-style).  
+- Updates instantly as inputs change.
 
-### ✔️ 3.3 Study Mode (Scenarios)
-- Pre-built example simulations  
-- Step-by-step explanation panels  
-- Conceptual questions  
-- Scenario “cards” loaded from DB or local config  
+### ⚙️ Study Mode (foundation)
+- Stubbed sample scenarios from the backend (`GET /api/scenarios`) for future study cards.  
+- UI wiring to be built next.
 
 ---
 
 ## 4. Future Features (Phase 2+)
 
-- **Calorimetry simulation**
-  - Coffee cup calorimeter
-  - Bomb calorimeter (approx.)
-  - Heating curves & latent heat
-
-- **Phase Changes**
-  - Solid ↔ liquid ↔ gas transitions
-  - Heat vs. temperature graphs
-
-- **Engine Cycles**
-  - Otto cycle (spark ignition engine)
-  - Carnot cycle
-  - Efficiency display + process animations
-
-- **Advanced Visualizations**
-  - 3D particle motion (molecular simulation)
-  - Heat transfer animations
-
-- **User Accounts (Optional)**
-  - Save scenarios
-  - Track learning progress  
+- Calorimetry simulation (coffee-cup), equilibrium temperature, heat balance.  
+- Phase changes & heating curves with latent heat plateaus.  
+- Engine cycles (Otto, Carnot) with efficiency indicators.  
+- Advanced visuals (particle box, thermal energy hints).  
+- Optional user accounts to save scenarios and track progress.
 
 ---
 
 ## 5. Architecture Overview
 
-### 5.1 Frontend Architecture
-**Tech:** JavaScript/TypeScript, React (planned), Vite  
-**Responsibilities:**
-- UI components (sliders, inputs, charts)
-- p-V diagram rendering
-- Simulation control logic
-- Fetching/storing scenario data from backend
-- Interactive animations
+### 5.1 Frontend (current)
+**Tech:** TypeScript, React 19, Vite, Recharts  
+**Responsibilities:** UI, client-side solver, unit conversions, backend calls  
 
-**Key Components (Planned):**
+Key files:
 ```
-/frontend/src/
-  components/
-    GasSandbox.jsx
-    PvDiagram.jsx
-    ProcessControls.jsx
-    ScenarioCard.jsx
-  utils/
-    thermo.js
-  pages/
-    Home.jsx
-    Simulator.jsx
-    StudyMode.jsx
+frontend/src/App.tsx
+frontend/src/components/GasSandbox.tsx
+frontend/src/components/PvDiagram.tsx
+frontend/src/components/BackendStatus.tsx
+frontend/src/utils/thermo.ts
+frontend/src/utils/backend.ts
 ```
 
----
+### 5.2 Backend (current)
+**Tech:** Java 17, Spring Boot 3  
+**Responsibilities:** Health check, scenario stub, backend ideal gas solver, CORS for Vite  
 
-### 5.2 Backend Architecture
-**Tech:** Java + Spring Boot  
-**Responsibilities:**
-- Serve REST API endpoints
-- Store/retrieve scenarios, concepts, and logs
-- Basic physics calculation verification (optional)
-- Handle future user accounts
-
-**Planned Endpoints:**
+Endpoints:
 ```
-GET /api/scenarios         
-GET /api/scenarios/{id}   
-POST /api/scenarios      
-GET /api/concepts         
+GET  /api/health
+GET  /api/scenarios
+POST /api/ideal-gas/solve
 ```
 
----
-
-### 5.3 Database Schema (Initial)
-
-**Tables:**
-
-**`scenarios`**
-- id (PK)  
-- title  
-- description  
-- initial_state (JSON: P,V,T,n)
-- process_type (enum)
-- final_state (JSON)
-- difficulty_level  
-
-**`concepts`**
-- id (PK)
-- topic
-- title
-- body_markdown
+### 5.3 Database (planned)
+Not yet wired. Planned tables:
+- `scenarios` — state JSON, process metadata, difficulty, timestamps.  
+- `concepts` — topic, title, markdown body, tags, timestamps.  
 
 ---
 
 ## 6. Development Workflow
 
-### 6.1 Flow
-1. Create issue for feature/bug  
-2. Assign label: `frontend`, `backend`, `documentation`, `physics-check`, etc.  
-3. Branch naming convention:
-```
-feature/pv-diagram
-feature/ideal-gas-solver
-docs/architecture
-fix/unit-conversion
-```
-4. Submit pull request  
-5. Automatic checks (future)  
-6. Merge  
+1. Open or pick up an issue (label with frontend/backend/docs/physics).  
+2. Branch from main:
+   ```
+   git checkout -b feature/my-feature
+   ```
+3. Develop locally  
+   - Backend: `cd backend && ./mvnw spring-boot:run` (port 8080)  
+   - Frontend: `cd frontend && npm install && npm run dev` (port 5173)  
+4. Keep commits small and descriptive.  
+5. Open a PR with what/why/how to test; include physics notes if relevant.  
+
+Coding notes:
+- Add concise comments for any non-obvious physics/math.  
+- Prefer pure functions in `thermo.ts` for testability.  
+- Lint/format per project defaults (TypeScript/ESLint, Java conventions).
 
 ---
 
 ## 7. Milestones
 
-### 🟦 **Milestone 1 — Frontend Prototype**
-- Ideal gas calculator UI  
-- Basic p–V chart using dummy data  
-- Thermodynamics utilities module  
-
-### 🟩 **Milestone 2 — Interactive Simulator**
-- Animations for isothermal/isobaric/isochoric  
-- Equation/explanation panel  
-- Study mode v1  
-
-### 🟧 **Milestone 3 — Backend + DB**
-- Spring Boot API structure  
-- Scenario CRUD  
-- DB integration  
-
-### 🟪 **Milestone 4 — Expanded Curriculum**
-- Calorimetry  
-- Phase changes  
-- Engine cycles  
+- 🟦 **Milestone 1 — Frontend Prototype (Done):** Ideal gas UI, live p–V chart, thermo helpers.  
+- 🟩 **Milestone 2 — Interactive Simulator (In progress):** Backend solver integration ✅; add tests; wire study mode UI.  
+- 🟧 **Milestone 3 — Backend + DB (Planned):** Scenario persistence, concept storage, migrations.  
+- 🟪 **Milestone 4 — Expanded Curriculum (Planned):** Calorimetry, phase changes, engine cycles.  
 
 ---
 
 ## 8. Physics Validation Checklist
 
-Each calculation/module will be validated by:
-- Unit checks  
-- Dimensional analysis  
-- Standard thermodynamic identities:
-  - \(PV=nRT\)  
-  - \(W = \int P\,dV\)  
-  - \(Q = n C \Delta T\)
-  - \(ΔU = n C_v ΔT\)
-
-(Optional) Add a `physics-tests/` directory later.
+- Unit checks and dimensional analysis.  
+- Standard identities: \(PV = nRT\), \(W = \int P\, dV\), \(Q = n C \Delta T\), \(ΔU = n C_v ΔT\).  
+- When adding new formulas, cite references in docs or PR description.  
 
 ---
 
-## 9. Community & Contribution Philosophy
+## 9. Next Steps
 
-Thermo-Sim aims to be:
-- Beginner-friendly  
-- Transparent  
-- Educational for both developers *and* users  
-- Open to students learning to code and learning physics  
-
-A separate `CONTRIBUTING.md` file will outline contributor workflows.
+- Add automated tests (frontend thermo helpers; backend ideal gas controller).  
+- Build study mode UI that consumes `/api/scenarios`.  
+- Implement work/heat for basic processes in `thermo.ts`.  
+- Draft calorimetry module requirements and UI sketches.  
+- Publish “good first issue” items to onboard contributors.  
 
 ---
 
-## 10. Next Steps
+## 10. Maintainer
 
-- Build frontend skeleton  
-- Implement ideal gas calculator  
-- Start backend scaffolding  
-- Add architecture documentation  
-- Open issues for community contributions  
-
----
-
-## 11. Maintainer
-
-**Gabriel Graves (GGravesStudios)**  
-Creator, Developer, Student Researcher
-
----
+Gabriel Graves (GGravesStudios) — Creator, Developer, Student Researcher

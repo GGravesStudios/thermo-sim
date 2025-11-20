@@ -1,5 +1,5 @@
 // frontend/src/utils/backend.ts
-export const BACKEND_BASE_URL = 'http://localhost:8080';
+export const BACKEND_BASE_URL = (import.meta.env.VITE_BACKEND_URL ?? '').replace(/\/$/, '');
 
 export async function fetchHealth() {
   const res = await fetch(`${BACKEND_BASE_URL}/api/health`);
@@ -21,20 +21,32 @@ export async function fetchScenarios() {
 import type { IdealGasInput, IdealGasSolution } from './thermo';
 
 export async function solveIdealGasRemote(
-  input: IdealGasInput
+  input: IdealGasInput & {
+    P?: number | null;
+    V?: number | null;
+    T?: number | null;
+    n?: number | null;
+  }
 ): Promise<IdealGasSolution> {
+  const solveFor = input.solveFor?.toUpperCase?.() ?? "P";
+
+  // Build payload expected by the backend controller.
+  // If the specialized fields (P_atm, V_L, T_K, n_mol) are not present,
+  // fall back to generic P, V, T, n from the UI state.
+  const payload = {
+    solveFor,
+    P_atm: solveFor === "P" ? null : (input.P_atm ?? input.P ?? null),
+    V_L:   solveFor === "V" ? null : (input.V_L ?? input.V ?? null),
+    T_K:   solveFor === "T" ? null : (input.T_K ?? input.T ?? null),
+    n_mol: solveFor === "N" ? null : (input.n_mol ?? input.n ?? null),
+  };
+
   const res = await fetch(`${BACKEND_BASE_URL}/api/ideal-gas/solve`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      P_atm: input.P_atm,
-      V_L: input.V_L,
-      T_K: input.T_K,
-      n_mol: input.n_mol,
-      solveFor: input.solveFor,
-    }),
+    body: JSON.stringify(payload),
   });
 
   if (!res.ok) {
@@ -44,9 +56,8 @@ export async function solveIdealGasRemote(
 
   const data = await res.json();
 
-  // Map backend response into our frontend IdealGasSolution shape
   const value =
-    typeof data.value === 'number'
+    typeof data.value === "number"
       ? data.value
       : Number.isFinite(Number(data.value))
       ? Number(data.value)
@@ -54,8 +65,8 @@ export async function solveIdealGasRemote(
 
   return {
     value,
-    unit: data.unit ?? '',
-    label: data.label ?? '',
+    unit: data.unit ?? "",
+    label: data.label ?? "",
     error: data.error ?? undefined,
   };
 }
