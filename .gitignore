@@ -22,3 +22,28 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# Root-level Node stuff (in case you accidentally ran npm here)
+node_modules/
+dist/
+.vite/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Backend (Maven / Java)
+backend/target/
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/.idea/
+
+# Maven wrapper cache
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# OS & editor junk
+.DS_Store
+.vscode/
+.idea/
